@@ -1,0 +1,6 @@
+github.com/athomelabs/dbcon v1.0.0 h1:h+R0miWIji4aGwL+MDrvKvEZtumBT2LJsQNUPyFYrDg=
+github.com/athomelabs/dbcon v1.0.0/go.mod h1:Sqba/LwjwDzaV6D7gVfCkqtFQYjP76q6PMDQ0WMuxsQ=
+github.com/athomelabs/dbcon v1.1.0 h1:w8PRp2ABbG8cZ/Rm2QmDavfwbRrrJEWTRjnU3hpcZrs=
+github.com/athomelabs/dbcon v1.1.0/go.mod h1:Sqba/LwjwDzaV6D7gVfCkqtFQYjP76q6PMDQ0WMuxsQ=
+github.com/lib/pq v1.7.0 h1:h93mCPfUSkaul3Ka/VG8uZdmW1uMHDGxzu0NWHuJmHY=
+github.com/lib/pq v1.7.0/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
