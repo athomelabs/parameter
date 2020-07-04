@@ -14,6 +14,14 @@ var (
 	errData error
 )
 
+type Instance interface {
+	GetByName(name string) (json.RawMessage, bool)
+	GetInt64(name string) (int64, bool)
+	GetFloat64(name string) (float64, bool)
+	GetTime(name, format string) (time.Time, bool)
+	GetString(name string) (string, bool)
+}
+
 type model struct {
 	mutex sync.Mutex
 	data  map[string]json.RawMessage
