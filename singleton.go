@@ -146,5 +146,12 @@ func (m *model) GetString(name string) (string, bool) {
 		return "", ok
 	}
 
-	return string(value), true
+	var bytesValue []byte
+
+	err := value.UnmarshalJSON(bytesValue)
+	if err != nil {
+		return "", false
+	}
+
+	return string(bytesValue), true
 }
