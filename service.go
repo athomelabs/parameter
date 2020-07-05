@@ -1,11 +1,9 @@
 package parameter
 
-import "encoding/json"
-
 type Servicer interface {
 	Create(model *Parameter) error
 	Update(model *Parameter) error
-	UpdateByName(string, json.RawMessage) error
+	UpdateByName(string, string) error
 	Delete(id uint) error
 	GetByID(id uint) (*Parameter, error)
 	GetAll() (Parameters, error)
@@ -28,7 +26,7 @@ func (s *Service) Update(model *Parameter) error {
 	return s.repo.update(model)
 }
 
-func (s *Service) UpdateByName(name string, value json.RawMessage) error {
+func (s *Service) UpdateByName(name string, value string) error {
 	return s.repo.updateByName(name, value)
 }
 

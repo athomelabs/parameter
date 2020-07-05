@@ -2,7 +2,6 @@ package parameter
 
 import (
 	"database/sql"
-	"encoding/json"
 	"strconv"
 	"sync"
 	"time"
@@ -15,16 +14,15 @@ var (
 )
 
 type Instance interface {
-	GetByName(name string) (json.RawMessage, bool)
+	GetString(name string) (string, bool)
 	GetInt64(name string) (int64, bool)
 	GetFloat64(name string) (float64, bool)
 	GetTime(name, format string) (time.Time, bool)
-	GetString(name string) (string, bool)
 }
 
 type model struct {
 	mutex sync.Mutex
-	data  map[string]json.RawMessage
+	data  map[string]string
 }
 
 func New(engine string, db *sql.DB) error {
@@ -54,7 +52,7 @@ func LoadData(engine string, db *sql.DB) error {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
 
-	ms.data = make(map[string]json.RawMessage)
+	ms.data = make(map[string]string)
 	for _, param := range params {
 		ms.data[param.Name] = param.Value
 	}
@@ -64,19 +62,19 @@ func LoadData(engine string, db *sql.DB) error {
 
 // GetByName obtains the value by name
 // in the parameter cache
-func (m *model) GetByName(name string) (json.RawMessage, bool) {
+func (m *model) GetString(name string) (string, bool) {
 	v, ok := m.data[name]
 
 	return v, ok
 }
 
 func (m *model) GetInt64(name string) (int64, bool) {
-	value, ok := m.GetByName(name)
+	value, ok := m.GetString(name)
 	if !ok {
 		return 0, ok
 	}
 
-	intValue, err := strconv.ParseInt(string(value), 10, 64)
+	intValue, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
 		return 0, false
 	}
@@ -85,12 +83,12 @@ func (m *model) GetInt64(name string) (int64, bool) {
 }
 
 func (m *model) GetInt(name string) (int, bool) {
-	value, ok := m.GetByName(name)
+	value, ok := m.GetString(name)
 	if !ok {
 		return 0, ok
 	}
 
-	intValue, err := strconv.Atoi(string(value))
+	intValue, err := strconv.Atoi(value)
 	if err != nil {
 		return 0, false
 	}
@@ -99,12 +97,12 @@ func (m *model) GetInt(name string) (int, bool) {
 }
 
 func (m *model) GetFloat64(name string) (float64, bool) {
-	value, ok := m.GetByName(name)
+	value, ok := m.GetString(name)
 	if !ok {
 		return 0, ok
 	}
 
-	floatValue, err := strconv.ParseFloat(string(value), 64)
+	floatValue, err := strconv.ParseFloat(value, 64)
 	if err != nil {
 		return 0, false
 	}
@@ -113,12 +111,12 @@ func (m *model) GetFloat64(name string) (float64, bool) {
 }
 
 func (m *model) GetTime(name, format string) (time.Time, bool) {
-	value, ok := m.GetByName(name)
+	value, ok := m.GetString(name)
 	if !ok {
 		return time.Time{}, ok
 	}
 
-	timeValue, err := time.Parse(format, string(value))
+	timeValue, err := time.Parse(format, value)
 	if err != nil {
 		return time.Time{}, false
 	}
@@ -127,31 +125,15 @@ func (m *model) GetTime(name, format string) (time.Time, bool) {
 }
 
 func (m *model) GetBool(name string) (bool, bool) {
-	value, ok := m.GetByName(name)
+	value, ok := m.GetString(name)
 	if !ok {
 		return false, ok
 	}
 
-	boolValue, err := strconv.ParseBool(string(value))
+	boolValue, err := strconv.ParseBool(value)
 	if err != nil {
 		return false, false
 	}
 
 	return boolValue, true
-}
-
-func (m *model) GetString(name string) (string, bool) {
-	value, ok := m.GetByName(name)
-	if !ok {
-		return "", ok
-	}
-
-	var bytesValue []byte
-
-	err := value.UnmarshalJSON(bytesValue)
-	if err != nil {
-		return "", false
-	}
-
-	return string(bytesValue), true
 }

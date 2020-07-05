@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS parameters
 (
     id SERIAL NOT NULL ,
     name VARCHAR(256) NOT NULL ,
-    value json ,
+    value VARCHAR(256) NOT NULL ,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP ,
     CONSTRAINT parameters_id_pk PRIMARY KEY (id),

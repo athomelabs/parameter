@@ -2,7 +2,6 @@ package parameter
 
 import (
 	"database/sql"
-	"encoding/json"
 
 	"github.com/athomelabs/dbcon"
 	"github.com/lib/pq"
@@ -58,7 +57,7 @@ func (p Psql) update(model *Parameter) error {
 	return nil
 }
 
-func (p Psql) updateByName(name string, value json.RawMessage) error {
+func (p Psql) updateByName(name string, value string) error {
 	stmt, err := p.db.Prepare(psqlUpdateByName)
 	if err != nil {
 		return err
